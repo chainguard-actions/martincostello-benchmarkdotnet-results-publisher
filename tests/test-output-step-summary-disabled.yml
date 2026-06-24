@@ -1,0 +1,38 @@
+name: Test output-step-summary disabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/main
+      GITHUB_EVENT_NAME: push
+      GITHUB_REPOSITORY: test-owner/test-repo
+      GITHUB_RUN_ID: "123"
+      GITHUB_SHA: "abc1234567890abcdef1234567890abcdef123456"
+      GITHUB_SERVER_URL: "https://github.com"
+      GITHUB_API_URL: "https://api.github.com"
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create empty results directory
+        run: mkdir -p /tmp/empty-benchmark-results-summary
+
+      - id: action
+        uses: .
+        with:
+          repo-token: fake-token
+          results-path: /tmp/empty-benchmark-results-summary
+          output-step-summary: "false"
+        continue-on-error: true
+
+      - name: Assert action completed without step summary
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "success" ]; then
+            echo "FAIL: expected action to succeed with output-step-summary disabled, got outcome '$OUTCOME'"
+            exit 1
+          fi
+          echo "PASS"

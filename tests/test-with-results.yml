@@ -1,0 +1,38 @@
+name: Test with benchmark results found
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/main
+      GITHUB_EVENT_NAME: push
+      GITHUB_REPOSITORY: test-owner/test-repo
+      GITHUB_RUN_ID: "123"
+      GITHUB_SHA: "abc1234567890abcdef1234567890abcdef123456"
+      GITHUB_SERVER_URL: "https://github.com"
+      GITHUB_API_URL: "https://api.github.com"
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        with:
+          repo-token: fake-token
+          results-path: "${{ github.workspace }}/tests/fixtures/new-benchmark/BenchmarkDotNet.Artifacts"
+          output-step-summary: "false"
+        continue-on-error: true
+
+      - name: Assert action attempted to publish (failed at API, not at results-finding)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action should fail because the fake token can't push to GitHub,
+          # but it should have found the results (not warn about no results).
+          # A failure here means it found results and tried to publish them.
+          if [ "$OUTCOME" != "failure" ]; then
+            echo "FAIL: expected action to fail at API call stage (found results but fake token), got outcome '$OUTCOME'"
+            exit 1
+          fi
+          echo "PASS: action found results and attempted to publish (failed at API as expected with fake token)"

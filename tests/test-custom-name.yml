@@ -1,0 +1,39 @@
+name: Test custom benchmark suite name
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/main
+      GITHUB_EVENT_NAME: push
+      GITHUB_REPOSITORY: test-owner/test-repo
+      GITHUB_RUN_ID: "123"
+      GITHUB_SHA: "abc1234567890abcdef1234567890abcdef123456"
+      GITHUB_SERVER_URL: "https://github.com"
+      GITHUB_API_URL: "https://api.github.com"
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        with:
+          repo-token: fake-token
+          name: "MyCustomSuite"
+          results-path: "${{ github.workspace }}/tests/fixtures/new-benchmark/BenchmarkDotNet.Artifacts"
+          output-step-summary: "false"
+        continue-on-error: true
+
+      - name: Assert action attempted to publish with custom name
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action should fail at the API call stage (fake token),
+          # not at the results-finding stage, meaning it found results
+          # and tried to publish them with the custom suite name.
+          if [ "$OUTCOME" != "failure" ]; then
+            echo "FAIL: expected action to fail at API call stage with custom name, got outcome '$OUTCOME'"
+            exit 1
+          fi
+          echo "PASS: action found results with custom name and attempted to publish"

@@ -1,0 +1,79 @@
+{
+  "name": "benchmarkdotnet-results-publisher",
+  "version": "2.0.4",
+  "private": true,
+  "description": "A GitHub Action that publishes results from BenchmarkDotNet benchmarks to a GitHub repository.",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write eslint.config.mjs src/**/*.ts tests/**/*.ts",
+    "format-check": "prettier --check eslint.config.mjs src/**/*.ts tests/**/*.ts",
+    "generate": "npm run build && npm run package",
+    "lint": "eslint src/**/*.ts --fix",
+    "package": "esbuild lib/main.js --bundle --minify --outdir=dist --packages=bundle --platform=node --sourcemap --target=node24.0.0",
+    "test": "vitest run",
+    "publish": "npm run format && npm run lint && npm run generate",
+    "all": "npm run publish && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martincostello/benchmarkdotnet-results-publisher.git"
+  },
+  "keywords": [
+    "actions",
+    "benchmarkdotnet",
+    "github"
+  ],
+  "author": {
+    "name": "Martin Costello",
+    "url": "https://martincostello.com/"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/martincostello/benchmarkdotnet-results-publisher/issues"
+  },
+  "homepage": "https://github.com/martincostello/benchmarkdotnet-results-publisher#readme",
+  "dependencies": {
+    "@actions/core": "3.0.1",
+    "@actions/github": "9.1.1",
+    "@octokit/plugin-paginate-rest": "14.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "17.0.0",
+    "glob": "13.0.6",
+    "lru-cache": "11.5.1"
+  },
+  "devDependencies": {
+    "@actions/io": "3.0.2",
+    "@eslint/eslintrc": "3.3.5",
+    "@eslint/js": "9.39.4",
+    "@octokit/types": "16.0.0",
+    "@stylistic/eslint-plugin": "5.10.0",
+    "@types/node": "25.9.2",
+    "@typescript-eslint/eslint-plugin": "8.61.0",
+    "@typescript-eslint/parser": "8.61.0",
+    "@vitest/coverage-v8": "4.1.8",
+    "@vitest/eslint-plugin": "1.6.19",
+    "esbuild": "0.28.1",
+    "eslint": "9.39.4",
+    "eslint-plugin-github": "6.0.0",
+    "eslint-plugin-prettier": "5.5.6",
+    "globals": "17.6.0",
+    "prettier": "3.8.4",
+    "typescript": "6.0.3",
+    "undici": "8.4.1",
+    "vitest": "4.1.8"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "printWidth": 80,
+    "quoteProps": "consistent",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  }
+}
