@@ -1,0 +1,78 @@
+{
+  "Title": "MyBenchmarks.Benchmarks-20240101-120000",
+  "HostEnvironmentInfo": {
+    "BenchmarkDotNetCaption": "BenchmarkDotNet",
+    "BenchmarkDotNetVersion": "0.13.12",
+    "OsVersion": "Ubuntu 22.04",
+    "ProcessorName": "Intel Core i7",
+    "PhysicalProcessorCount": 1,
+    "PhysicalCoreCount": 4,
+    "LogicalCoreCount": 8,
+    "RuntimeVersion": ".NET 8.0",
+    "Architecture": "X64",
+    "HasAttachedDebugger": false,
+    "HasRyuJit": true,
+    "Configuration": "RELEASE",
+    "DotNetCliVersion": "8.0.0",
+    "ChronometerFrequency": {"Hertz": 1000000000},
+    "HardwareTimerKind": "Tsc"
+  },
+  "Benchmarks": [
+    {
+      "DisplayInfo": "MyBenchmarks.Benchmarks.BenchmarkMethod",
+      "Namespace": "MyBenchmarks",
+      "Type": "Benchmarks",
+      "Method": "BenchmarkMethod",
+      "MethodTitle": "BenchmarkMethod",
+      "Parameters": "",
+      "FullName": "MyBenchmarks.Benchmarks.BenchmarkMethod",
+      "Statistics": {
+        "N": 100,
+        "Min": 100.0,
+        "LowerFence": 95.0,
+        "Q1": 105.0,
+        "Median": 110.0,
+        "Mean": 112.5,
+        "Q3": 118.0,
+        "UpperFence": 125.0,
+        "Max": 130.0,
+        "InterquartileRange": 13.0,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 0.5,
+        "Variance": 25.0,
+        "StandardDeviation": 5.0,
+        "Skewness": 0.1,
+        "Kurtosis": 2.9,
+        "ConfidenceInterval": {
+          "N": 100,
+          "Mean": 112.5,
+          "StandardError": 0.5,
+          "Level": 12,
+          "Margin": 0.98,
+          "Lower": 111.52,
+          "Upper": 113.48
+        },
+        "Percentiles": {
+          "P0": 100.0,
+          "P25": 105.0,
+          "P50": 110.0,
+          "P67": 113.0,
+          "P80": 116.0,
+          "P85": 117.0,
+          "P90": 119.0,
+          "P95": 122.0,
+          "P100": 130.0
+        }
+      },
+      "Memory": {
+        "Gen0Collections": 0,
+        "Gen1Collections": 0,
+        "Gen2Collections": 0,
+        "TotalOperations": 100,
+        "BytesAllocatedPerOperation": 256
+      }
+    }
+  ]
+}
