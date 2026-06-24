@@ -1,0 +1,39 @@
+name: Test threshold and output-file-path inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_API_URL: https://api.github.com
+      GITHUB_EVENT_NAME: push
+      GITHUB_REF: refs/heads/main
+      GITHUB_REPOSITORY: octocat/hello-world
+      GITHUB_RUN_ID: '1'
+      GITHUB_SERVER_URL: https://github.com
+      GITHUB_SHA: 0000000000000000000000000000000000000000
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        with:
+          results-path: ${{ github.workspace }}/pristine/martincostello--benchmarkdotnet-results-publisher/v2.0.1/tests/fixtures/empty
+          output-step-summary: 'false'
+          repo-token: 'fake-token-not-used-when-no-results'
+          fail-on-threshold: 'false'
+          fail-threshold-duration: '1.1'
+          fail-threshold-memory: '1.2'
+          output-file-path: '/tmp/benchmark-results.json'
+        continue-on-error: true
+
+      - name: Assert action succeeded with threshold and output-file-path inputs
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "success" ]; then
+            echo "FAIL: expected action to succeed when no results found, got '$OUTCOME'"
+            exit 1
+          fi
+          echo "PASS"

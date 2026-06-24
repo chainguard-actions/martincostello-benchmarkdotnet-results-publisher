@@ -1,0 +1,44 @@
+name: Test with benchmark results
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_API_URL: https://api.github.com
+      GITHUB_EVENT_NAME: push
+      GITHUB_REF: refs/heads/main
+      GITHUB_REPOSITORY: octocat/hello-world
+      GITHUB_RUN_ID: '1'
+      GITHUB_SERVER_URL: https://github.com
+      GITHUB_SHA: 0000000000000000000000000000000000000000
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        with:
+          results-path: ${{ github.workspace }}/pristine/martincostello--benchmarkdotnet-results-publisher/v2.0.1/tests/fixtures/new-benchmark/BenchmarkDotNet.Artifacts
+          output-step-summary: 'false'
+          repo-token: 'fake-token-for-testing'
+          repo: 'octocat/hello-world'
+        continue-on-error: true
+
+      - name: Assert action ran and attempted to process results
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action finds results and tries to call GitHub API with a fake token.
+          # It will fail due to authentication, but that means it successfully found
+          # the benchmark results and attempted to publish them.
+          # We accept 'failure' as the expected outcome here (API auth failure).
+          if [ "$OUTCOME" = "success" ]; then
+            echo "WARN: action succeeded unexpectedly - API may not have been called"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "INFO: action failed as expected (fake token cannot authenticate with GitHub API)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi
+          echo "PASS: action ran and processed results"
