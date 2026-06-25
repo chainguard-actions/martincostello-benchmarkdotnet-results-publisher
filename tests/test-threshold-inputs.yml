@@ -1,4 +1,4 @@
-name: Test commit-message and commit-message-prefix inputs
+name: Test fail-threshold-duration and fail-threshold-memory inputs
 on:
   workflow_dispatch:
 jobs:
@@ -19,9 +19,10 @@ jobs:
           output-step-summary: 'false'
           repo-token: 'fake-token-for-testing'
           repo: 'octocat/hello-world'
-          commit-message: 'chore: update benchmark results'
-          commit-message-prefix: '[Benchmarks]'
-      - name: Assert action ran (commit-message and commit-message-prefix inputs accepted)
+          fail-on-threshold: 'true'
+          fail-threshold-duration: '1.1'
+          fail-threshold-memory: '1.2'
+      - name: Assert action ran (fail-threshold-duration and fail-threshold-memory inputs accepted)
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
