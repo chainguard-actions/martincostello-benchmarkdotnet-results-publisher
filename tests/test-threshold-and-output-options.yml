@@ -1,0 +1,33 @@
+name: Test threshold and output file options
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: refs/heads/main
+      GITHUB_EVENT_NAME: push
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Create empty results directory
+        run: mkdir -p /tmp/threshold-benchmarks
+      - id: action
+        uses: .
+        with:
+          results-path: /tmp/threshold-benchmarks
+          output-step-summary: 'false'
+          repo-token: fake-token-for-testing
+          fail-threshold-duration: '1.5'
+          fail-threshold-memory: '1.2'
+          output-file-path: /tmp/benchmark-output.json
+        continue-on-error: true
+      - name: Assert action succeeded with threshold and output-file-path inputs set
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "success" ]; then
+            echo "FAIL: expected action to succeed when no results are found with threshold inputs set, got '$OUTCOME'"
+            exit 1
+          fi
+          echo "PASS"
