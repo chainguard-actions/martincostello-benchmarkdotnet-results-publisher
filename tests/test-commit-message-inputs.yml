@@ -1,0 +1,33 @@
+name: Test commit-message and commit-message-prefix inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REPOSITORY: octocat/hello-world
+      GITHUB_EVENT_NAME: push
+      GITHUB_REF: refs/heads/main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Create empty results directory
+        run: mkdir -p /tmp/commit-msg-benchmarks
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          results-path: /tmp/commit-msg-benchmarks
+          output-step-summary: 'false'
+          repo-token: 'fake-token-not-needed-when-no-results'
+          commit-message: 'chore: update benchmark results'
+          commit-message-prefix: '[Benchmarks]'
+      - name: Assert action succeeded with no results (commit-message inputs accepted)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" != "success" ]; then
+            echo "FAIL: expected action to succeed when no results found, got: $OUTCOME"
+            exit 1
+          fi
+          echo "PASS"

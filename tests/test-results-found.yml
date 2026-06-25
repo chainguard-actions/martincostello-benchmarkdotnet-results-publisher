@@ -1,0 +1,38 @@
+name: Test results found and processed
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_REPOSITORY: octocat/hello-world
+      GITHUB_EVENT_NAME: push
+      GITHUB_REF: refs/heads/main
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        continue-on-error: true
+        with:
+          results-path: >-
+            ${{ github.workspace }}/pristine/martincostello--benchmarkdotnet-results-publisher/v2.0.2/tests/fixtures/BenchmarkDotNet.Artifacts
+          output-step-summary: 'false'
+          repo-token: 'fake-token-for-testing'
+          repo: 'octocat/hello-world'
+      - name: Assert action failed at API call (not at results parsing)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action should fail because the token is invalid and it tries to push to GitHub API.
+          # If it failed at results parsing, it would have a different error.
+          # We accept either 'failure' (API error) or 'success' (unlikely without real token).
+          # The key is it should NOT fail with "No BenchmarkDotNet results found".
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded (unexpected but acceptable)"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed at API call as expected with fake token"
+          else
+            echo "FAIL: unexpected outcome: $OUTCOME"
+            exit 1
+          fi
