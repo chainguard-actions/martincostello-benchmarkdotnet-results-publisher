@@ -1,4 +1,4 @@
-name: Test no results found
+name: Test max-items input
 on:
   workflow_dispatch:
 jobs:
@@ -8,14 +8,17 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Create empty results directory
-        run: mkdir -p /tmp/empty-benchmarks
+        run: mkdir -p /tmp/max-items-benchmarks
 
       - id: action
-        name: Run action with empty results directory
+        name: Run action with max-items set
         uses: .
         with:
-          results-path: /tmp/empty-benchmarks
+          results-path: /tmp/max-items-benchmarks
           output-step-summary: 'false'
+          max-items: '10'
+          name: 'MyBenchmarkSuite'
+          commit-message-prefix: '[benchmarks]'
         continue-on-error: true
 
       - name: Assert action did not fail
@@ -24,7 +27,7 @@ jobs:
         run: |
           echo "outcome: $OUTCOME"
           if [ "$OUTCOME" = "failure" ]; then
-            echo "FAIL: action should not fail when no results are found"
+            echo "FAIL: action should not fail when no results are found (with max-items set)"
             exit 1
           fi
-          echo "PASS: action completed without failure when no results found"
+          echo "PASS: action completed without failure with max-items configured"

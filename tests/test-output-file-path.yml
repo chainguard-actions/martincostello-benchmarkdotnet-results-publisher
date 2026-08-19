@@ -1,4 +1,4 @@
-name: Test with benchmark results
+name: Test output-file-path input
 on:
   workflow_dispatch:
 jobs:
@@ -9,8 +9,8 @@ jobs:
 
       - name: Create benchmark result files
         run: |
-          mkdir -p /tmp/benchmark-results/results
-          cat > /tmp/benchmark-results/results/MyBenchmarks-report-full-compressed.json << 'EOF'
+          mkdir -p /tmp/benchmark-results-ofp/results
+          cat > /tmp/benchmark-results-ofp/results/MyBenchmarks-report-full-compressed.json << 'EOF'
           {
             "Title": "MyBenchmarks-20240817-102749",
             "HostEnvironmentInfo": {
@@ -93,14 +93,13 @@ jobs:
           EOF
 
       - id: action
-        name: Run action with benchmark results
+        name: Run action with output-file-path
         uses: .
         with:
-          results-path: /tmp/benchmark-results
+          results-path: /tmp/benchmark-results-ofp
+          output-file-path: /tmp/benchmark-output.json
           output-step-summary: 'false'
-          branch: act-test-benchmarks
-          commit-message: 'Test: publish benchmark results from act test'
-          name: 'ActTestBenchmarks'
+          name: 'OutputFilePathTest'
         continue-on-error: true
 
       - name: Assert action ran
@@ -108,10 +107,8 @@ jobs:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "outcome: $OUTCOME"
-          # The action either succeeds (published) or fails due to API issues.
-          # We just verify it ran and processed the results (not a setup error).
           if [ "$OUTCOME" = "skipped" ]; then
             echo "FAIL: action was skipped unexpectedly"
             exit 1
           fi
-          echo "PASS: action ran (outcome=$OUTCOME)"
+          echo "PASS: action ran with output-file-path input (outcome=$OUTCOME)"

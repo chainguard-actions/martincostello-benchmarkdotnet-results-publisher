@@ -1,0 +1,57 @@
+name: Test threshold inputs
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create empty results directory
+        run: mkdir -p /tmp/threshold-benchmarks
+
+      - id: action
+        name: Run action with threshold inputs
+        uses: .
+        with:
+          results-path: /tmp/threshold-benchmarks
+          output-step-summary: 'false'
+          fail-on-threshold: 'false'
+          comment-on-threshold: 'false'
+          fail-threshold-duration: '2.0'
+          fail-threshold-memory: '1.5'
+        continue-on-error: true
+
+      - name: Assert action did not fail
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "FAIL: action should not fail when no results are found (with thresholds set)"
+            exit 1
+          fi
+          echo "PASS: action completed without failure with threshold inputs configured"
+
+      - id: action-fail-threshold
+        name: Run action with fail-on-threshold enabled but no results
+        uses: .
+        with:
+          results-path: /tmp/threshold-benchmarks
+          output-step-summary: 'false'
+          fail-on-threshold: 'true'
+          fail-threshold-duration: '1.5'
+          fail-threshold-memory: '1.5'
+        continue-on-error: true
+
+      - name: Assert action with fail-on-threshold did not fail (no results to compare)
+        env:
+          OUTCOME: ${{ steps.action-fail-threshold.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # With no results, the action warns but does not fail even with fail-on-threshold=true
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "FAIL: action should not fail when no results are found even with fail-on-threshold=true"
+            exit 1
+          fi
+          echo "PASS: action completed without failure (no results to trigger threshold)"

@@ -1,0 +1,49 @@
+name: Test output-step-summary disabled
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create empty results directory
+        run: mkdir -p /tmp/no-benchmarks
+
+      - id: action
+        name: Run action with output-step-summary disabled
+        uses: .
+        with:
+          results-path: /tmp/no-benchmarks
+          output-step-summary: 'false'
+        continue-on-error: true
+
+      - name: Assert action did not fail
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "FAIL: action should not fail when no results are found"
+            exit 1
+          fi
+          echo "PASS: action completed without failure"
+
+      - id: action-summary
+        name: Run action with output-step-summary enabled
+        uses: .
+        with:
+          results-path: /tmp/no-benchmarks
+          output-step-summary: 'true'
+        continue-on-error: true
+
+      - name: Assert action with summary did not fail
+        env:
+          OUTCOME: ${{ steps.action-summary.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "FAIL: action should not fail when no results are found (with summary enabled)"
+            exit 1
+          fi
+          echo "PASS: action completed without failure (with summary enabled)"
