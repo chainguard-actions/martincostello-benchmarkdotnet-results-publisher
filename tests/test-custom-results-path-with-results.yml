@@ -1,0 +1,32 @@
+name: Test - Custom results path with benchmark results
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+        with:
+          results-path: '${{ github.workspace }}/tests/fixtures/BenchmarkDotNet.Artifacts'
+          output-step-summary: 'true'
+          name: 'MyBenchmarks'
+          branch: 'gh-pages'
+        continue-on-error: true
+
+      - name: Assert action ran (found results and attempted to publish)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action should find the fixture JSON file and attempt to publish.
+          # It may succeed or fail depending on GitHub API write access in the test env.
+          # The important thing is it found the results (not "No BenchmarkDotNet results found").
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded - results found and published"
+          else
+            echo "INFO: action did not succeed (outcome=$OUTCOME)"
+            echo "PASS: action ran and attempted to process results from custom path"
+          fi

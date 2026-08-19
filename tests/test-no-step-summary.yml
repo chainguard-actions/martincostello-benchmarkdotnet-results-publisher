@@ -1,4 +1,4 @@
-name: Test - No benchmark results found
+name: Test - Step summary disabled
 on:
   workflow_dispatch:
 jobs:
@@ -7,10 +7,9 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Create empty results directory (no JSON files)
+      - name: Create empty results directory
         run: |
           mkdir -p "$GITHUB_WORKSPACE/BenchmarkDotNet.Artifacts/results"
-          # Only create a markdown file, no JSON — action should warn and exit cleanly
 
       - id: action
         uses: .
@@ -18,14 +17,14 @@ jobs:
           output-step-summary: 'false'
         continue-on-error: true
 
-      - name: Assert action completed (warning for no results, not failure)
+      - name: Assert action completed without failure
         env:
           OUTCOME: ${{ steps.action.outcome }}
         run: |
           echo "outcome: $OUTCOME"
-          # The action warns when no results are found but should not fail
+          # With no results and output-step-summary=false, action should warn and complete
           if [ "$OUTCOME" = "failure" ]; then
-            echo "FAIL: action failed unexpectedly when no results found"
+            echo "FAIL: action failed unexpectedly with output-step-summary=false"
             exit 1
           fi
-          echo "PASS: action completed without failure when no results found"
+          echo "PASS: action completed with output-step-summary=false"

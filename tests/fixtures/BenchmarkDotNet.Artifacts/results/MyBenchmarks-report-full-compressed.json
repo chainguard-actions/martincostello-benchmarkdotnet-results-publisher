@@ -1,0 +1,63 @@
+{
+  "Title": "MyBenchmarks",
+  "HostEnvironmentInfo": {
+    "BenchmarkDotNetCaption": "BenchmarkDotNet",
+    "BenchmarkDotNetVersion": "0.13.12"
+  },
+  "Benchmarks": [
+    {
+      "DisplayInfo": "MyBenchmarks.SampleBenchmark: DefaultJob",
+      "Namespace": "MyBenchmarks",
+      "Type": "SampleBenchmark",
+      "Method": "Benchmark",
+      "FullName": "MyBenchmarks.SampleBenchmark.Benchmark",
+      "Statistics": {
+        "N": 100,
+        "Min": 100.0,
+        "LowerFence": 95.0,
+        "Q1": 105.0,
+        "Median": 110.0,
+        "Mean": 110.5,
+        "Q3": 115.0,
+        "UpperFence": 120.0,
+        "Max": 125.0,
+        "InterquartileRange": 10.0,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 0.5,
+        "Variance": 25.0,
+        "StandardDeviation": 5.0,
+        "Skewness": 0.1,
+        "Kurtosis": 2.9,
+        "ConfidenceInterval": {
+          "N": 100,
+          "Mean": 110.5,
+          "StandardError": 0.5,
+          "Level": 12,
+          "Margin": 0.98,
+          "Lower": 109.52,
+          "Upper": 111.48
+        },
+        "Percentiles": {
+          "P0": 100.0,
+          "P25": 105.0,
+          "P50": 110.0,
+          "P67": 112.0,
+          "P80": 114.0,
+          "P85": 115.0,
+          "P90": 117.0,
+          "P95": 120.0,
+          "P100": 125.0
+        }
+      },
+      "Memory": {
+        "Gen0Collections": 0,
+        "Gen1Collections": 0,
+        "Gen2Collections": 0,
+        "TotalOperations": 100,
+        "BytesAllocatedPerOperation": 256
+      }
+    }
+  ]
+}

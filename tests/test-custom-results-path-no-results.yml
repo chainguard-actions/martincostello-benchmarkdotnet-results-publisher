@@ -1,0 +1,31 @@
+name: Test - Custom results path with no results
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create custom results directory with no JSON files
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/custom-benchmarks/results"
+          # No JSON files — action should warn and exit cleanly
+
+      - id: action
+        uses: .
+        with:
+          results-path: '${{ github.workspace }}/custom-benchmarks'
+          output-step-summary: 'false'
+        continue-on-error: true
+
+      - name: Assert action completed without failure
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          if [ "$OUTCOME" = "failure" ]; then
+            echo "FAIL: action failed unexpectedly when no results found at custom path"
+            exit 1
+          fi
+          echo "PASS: action completed without failure when no results found at custom path"
