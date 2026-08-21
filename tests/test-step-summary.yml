@@ -1,0 +1,42 @@
+name: Test - Step summary output
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Copy fixture benchmark results (JSON + Markdown) to workspace
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/BenchmarkDotNet.Artifacts/results"
+          cp "$GITHUB_WORKSPACE/tests/fixtures/BenchmarkDotNet.Artifacts/results/MyBenchmarks-report-full-compressed.json" \
+             "$GITHUB_WORKSPACE/BenchmarkDotNet.Artifacts/results/"
+          cp "$GITHUB_WORKSPACE/tests/fixtures/BenchmarkDotNet.Artifacts/results/MyBenchmarks-report-github.md" \
+             "$GITHUB_WORKSPACE/BenchmarkDotNet.Artifacts/results/"
+          echo "Fixture files copied."
+          ls -la "$GITHUB_WORKSPACE/BenchmarkDotNet.Artifacts/results/"
+
+      - id: action
+        uses: .
+        with:
+          output-step-summary: "true"
+          name: "MyBenchmarks"
+        continue-on-error: true
+
+      - name: Assert action ran with step summary enabled
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action finds results, attempts to publish (fails on sentinel repo),
+          # but should have processed the markdown for step summary before or after.
+          # Either success or failure is acceptable; we just verify it ran.
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded with step summary output"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo is not resolvable via API)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

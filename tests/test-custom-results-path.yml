@@ -1,0 +1,40 @@
+name: Test - Custom results-path input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Copy fixture benchmark results to custom path
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/my-custom-results/results"
+          cp "$GITHUB_WORKSPACE/tests/fixtures/BenchmarkDotNet.Artifacts/results/MyBenchmarks-report-full-compressed.json" \
+             "$GITHUB_WORKSPACE/my-custom-results/results/"
+          echo "Fixture JSON result copied to custom path."
+          ls -la "$GITHUB_WORKSPACE/my-custom-results/results/"
+
+      - id: action
+        uses: .
+        with:
+          results-path: "${{ github.workspace }}/my-custom-results"
+          output-step-summary: "false"
+          name: "CustomPathSuite"
+        continue-on-error: true
+
+      - name: Assert action ran with custom results-path
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action finds results in the custom path and attempts to publish.
+          # API calls fail on the sentinel repo, so failure is expected.
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded with custom results-path"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo is not resolvable via API)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

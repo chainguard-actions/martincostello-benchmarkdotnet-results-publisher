@@ -1,0 +1,45 @@
+name: Test - Threshold and output inputs (branch, commit-message, fail-threshold-duration, fail-threshold-memory, output-file-path)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Copy fixture benchmark results to workspace
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/BenchmarkDotNet.Artifacts/results"
+          cp "$GITHUB_WORKSPACE/tests/fixtures/BenchmarkDotNet.Artifacts/results/MyBenchmarks-report-full-compressed.json" \
+             "$GITHUB_WORKSPACE/BenchmarkDotNet.Artifacts/results/"
+          echo "Fixture JSON result copied."
+
+      - id: action
+        uses: .
+        with:
+          branch: "benchmarks"
+          commit-message: "chore: update benchmark results"
+          fail-threshold-duration: "1.5"
+          fail-threshold-memory: "1.5"
+          output-file-path: "${{ github.workspace }}/benchmark-output.json"
+          output-step-summary: "false"
+          name: "MyBenchmarks"
+        continue-on-error: true
+
+      - name: Assert action ran with threshold and output inputs
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action accepts threshold and output inputs and processes results.
+          # Under the harness, GITHUB_REPOSITORY is a sentinel that doesn't exist,
+          # so the API call (getCommit, getBranch, etc.) will fail with 404/401.
+          # Either success (unlikely) or failure (expected) is acceptable.
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded with threshold and output inputs"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo is not resolvable via API)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

@@ -1,0 +1,70 @@
+{
+  "Title": "MyBenchmarks-20240101-120000",
+  "HostEnvironmentInfo": {
+    "BenchmarkDotNetCaption": "BenchmarkDotNet",
+    "BenchmarkDotNetVersion": "0.13.12",
+    "OsVersion": "Ubuntu 22.04",
+    "ProcessorName": "Intel Core i7",
+    "RuntimeVersion": ".NET 8.0",
+    "Architecture": "64-bit",
+    "HasRyuJit": true,
+    "JitModules": "clrjit-v8.0.0"
+  },
+  "Benchmarks": [
+    {
+      "DisplayInfo": "MyBenchmarks.StringBenchmark: DefaultJob",
+      "Namespace": "MyBenchmarks",
+      "Type": "StringBenchmark",
+      "Method": "Concat",
+      "FullName": "MyBenchmarks.StringBenchmark.Concat",
+      "Parameters": "",
+      "Statistics": {
+        "N": 100,
+        "Min": 100.5,
+        "LowerFence": 95.0,
+        "Q1": 102.0,
+        "Median": 105.0,
+        "Mean": 105.3,
+        "Q3": 108.0,
+        "UpperFence": 115.0,
+        "Max": 120.0,
+        "InterquartileRange": 6.0,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 0.5,
+        "Variance": 25.0,
+        "StandardDeviation": 5.0,
+        "Skewness": 0.1,
+        "Kurtosis": 2.9,
+        "ConfidenceInterval": {
+          "N": 100,
+          "Mean": 105.3,
+          "StandardError": 0.5,
+          "Level": 12,
+          "Margin": 0.98,
+          "Lower": 104.32,
+          "Upper": 106.28
+        },
+        "Percentiles": {
+          "P0": 100.5,
+          "P25": 102.0,
+          "P50": 105.0,
+          "P67": 106.0,
+          "P80": 107.0,
+          "P85": 107.5,
+          "P90": 108.0,
+          "P95": 110.0,
+          "P100": 120.0
+        }
+      },
+      "Memory": {
+        "Gen0Collections": 0,
+        "Gen1Collections": 0,
+        "Gen2Collections": 0,
+        "TotalOperations": 100,
+        "BytesAllocatedPerOperation": 48
+      }
+    }
+  ]
+}
