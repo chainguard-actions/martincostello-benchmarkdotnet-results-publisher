@@ -8,7 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
-| v2 | [`v2`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2) | [`0f2a458`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/0f2a458a28dbd963b1bcb029efaec245b677c7b3) |
+| v2 | [`v2`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2) | [`236641c`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/236641c0fbb0e2dfbed98a9564b21d7abb7c6b09) |
 | v2.0.1 | [`v2.0.1`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2.0.1) | [`8ec1d7f`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/8ec1d7f1ee9854674aabb3f2b06a5afae1bec8ae) |
 | v2.0.2 | [`v2.0.2`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2.0.2) | [`e4fb237`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/e4fb23764820e746c21c4e986e79bab086607fe9) |
 | v2.0.3 | [`v2.0.3`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2.0.3) | [`0f2a458`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/0f2a458a28dbd963b1bcb029efaec245b677c7b3) |
