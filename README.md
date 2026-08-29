@@ -15,6 +15,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 | v2.0.4 | [`v2.0.4`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2.0.4) | [`b1e7cf1`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/b1e7cf14565f479f7d7628c89ca3936142fa6d67) |
 | v2.0.5 | [`v2.0.5`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2.0.5) | [`b8fe7bb`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/b8fe7bb9691c4fdcda7dee630aa09493e81004b8) |
 | v2.1.0 | [`v2.1.0`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2.1.0) | [`236641c`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/236641c0fbb0e2dfbed98a9564b21d7abb7c6b09) |
+| v2.1.1 | [`v2.1.1`](https://github.com/chainguard-actions/martincostello-benchmarkdotnet-results-publisher/tree/v2.1.1) | [`9c52352`](https://github.com/martincostello/benchmarkdotnet-results-publisher/commit/9c523527deddd31d7e022f5db65ccdf3954d32c5) |
 
 ## Privacy
 
