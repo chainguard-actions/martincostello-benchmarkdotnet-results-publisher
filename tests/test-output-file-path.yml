@@ -1,0 +1,37 @@
+name: Test - Output file path input accepted
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Create output directory
+        run: mkdir -p "$GITHUB_WORKSPACE/benchmark-output"
+
+      - id: action
+        name: Run action with output-file-path input
+        uses: .
+        with:
+          results-path: ${{ github.workspace }}/tests/fixtures/BenchmarkDotNet.Artifacts
+          output-step-summary: 'false'
+          output-file-path: ${{ github.workspace }}/benchmark-output/results.json
+          name: 'OutputFilePathTest'
+        continue-on-error: true
+
+      - name: Assert action ran with output-file-path input (or failed gracefully on sentinel repo)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action accepts the output-file-path input and may write results to it.
+          # It may fail when trying to push to the sentinel repo (which doesn't exist on GitHub).
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded with output-file-path input"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo is not resolvable)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

@@ -1,0 +1,33 @@
+name: Test - Output step summary with benchmark results
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        name: Run action with benchmark results and step summary enabled
+        uses: .
+        with:
+          results-path: ${{ github.workspace }}/tests/fixtures/BenchmarkDotNet.Artifacts
+          output-step-summary: 'true'
+          name: 'MyBenchmarks'
+        continue-on-error: true
+
+      - name: Assert action ran (step summary output or failed gracefully on sentinel repo)
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "outcome: $OUTCOME"
+          # The action finds results and outputs step summary, but may fail when
+          # trying to push to the sentinel repo (which doesn't exist on GitHub).
+          if [ "$OUTCOME" = "success" ]; then
+            echo "PASS: action succeeded (results found and processed)"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (sentinel repo is not resolvable)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

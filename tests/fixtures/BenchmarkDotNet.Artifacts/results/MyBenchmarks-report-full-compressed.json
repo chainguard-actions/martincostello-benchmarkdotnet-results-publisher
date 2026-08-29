@@ -1,0 +1,86 @@
+{
+  "Title": "MyBenchmarks-20240817-102749",
+  "HostEnvironmentInfo": {
+    "BenchmarkDotNetCaption": "BenchmarkDotNet",
+    "BenchmarkDotNetVersion": "0.14.0",
+    "OsVersion": "Ubuntu 22.04",
+    "ProcessorName": "Intel Core i7",
+    "PhysicalProcessorCount": 1,
+    "PhysicalCoreCount": 4,
+    "LogicalCoreCount": 8,
+    "RuntimeVersion": ".NET 8.0.8 (8.0.824.36612)",
+    "Architecture": "X64",
+    "HasAttachedDebugger": false,
+    "HasRyuJit": true,
+    "Configuration": "RELEASE",
+    "DotNetCliVersion": "8.0.401",
+    "ChronometerFrequency": {
+      "Hertz": 10000000
+    },
+    "HardwareTimerKind": "Unknown"
+  },
+  "Benchmarks": [
+    {
+      "DisplayInfo": "MyBenchmarks.RunBenchmark: DefaultJob [input=001]",
+      "Namespace": "MyApp.Benchmarks",
+      "Type": "MyBenchmarks",
+      "Method": "RunBenchmark",
+      "MethodTitle": "RunBenchmark",
+      "Parameters": "input=001",
+      "FullName": "MyApp.Benchmarks.MyBenchmarks.RunBenchmark(input: 001)",
+      "HardwareIntrinsics": "AVX2",
+      "Statistics": {
+        "OriginalValues": [
+          100.5,
+          101.2,
+          99.8
+        ],
+        "N": 3,
+        "Min": 99.8,
+        "LowerFence": 95.0,
+        "Q1": 100.15,
+        "Median": 100.5,
+        "Mean": 100.5,
+        "Q3": 100.85,
+        "UpperFence": 106.0,
+        "Max": 101.2,
+        "InterquartileRange": 0.7,
+        "LowerOutliers": [],
+        "UpperOutliers": [],
+        "AllOutliers": [],
+        "StandardError": 0.41,
+        "Variance": 0.5,
+        "StandardDeviation": 0.71,
+        "Skewness": 0.0,
+        "Kurtosis": 1.5,
+        "ConfidenceInterval": {
+          "N": 3,
+          "Mean": 100.5,
+          "StandardError": 0.41,
+          "Level": 12,
+          "Margin": 12.96,
+          "Lower": 87.54,
+          "Upper": 113.46
+        },
+        "Percentiles": {
+          "P0": 99.8,
+          "P25": 100.15,
+          "P50": 100.5,
+          "P67": 100.65,
+          "P80": 100.76,
+          "P85": 100.83,
+          "P90": 100.9,
+          "P95": 101.05,
+          "P100": 101.2
+        }
+      },
+      "Memory": {
+        "Gen0Collections": 0,
+        "Gen1Collections": 0,
+        "Gen2Collections": 0,
+        "TotalOperations": 131072,
+        "BytesAllocatedPerOperation": 24
+      }
+    }
+  ]
+}
